@@ -14,15 +14,17 @@
               <option value="text">文字</option>
               <option value="link">超連結</option>
               <option value="image">圖片</option>
+              <option value="map">地圖</option>
+              <option value="video">影片</option>
             </select>
   
             <!-- 文字 or 連結輸入框 -->
             <input
-              v-if="content.contentType !== 'image'"
-              v-model="content.textContent"
-              :placeholder="content.contentType === 'text' ? '輸入文字' : '輸入連結'"
-              class="input-field"
-            />
+      v-if="['text', 'link', 'map', 'video'].includes(content.contentType)"
+      v-model="content.textContent"
+      :placeholder="getPlaceholder(content.contentType)"
+      class="input-field"
+    />
   
             <!-- 圖片上傳 -->
             <div v-if="content.contentType === 'image'" class="image-upload">
@@ -40,6 +42,8 @@
   
         <!-- 送出按鈕 -->
         <button type="submit" class="submit-button">提交</button>
+<button type="button" @click="cancelEdit" class="cancel-button">取消</button>
+
       </form>
     </div>
   </template>
@@ -100,8 +104,8 @@ async function submitForm() {
     guideline: guideline.value,
     contents: contents.value.map((content, index) => ({
       contentType: content.contentType,
-      textContent: content.textContent || "",
-      imageContent: content.contentType === "image" ? "" : content.imageContent,
+      textContent: content.contentType!=="image"?content.textContent : "",
+      imageContent: content.contentType === "image" ? content.imageContent : "",
     })),
   };
 
@@ -124,6 +128,27 @@ async function submitForm() {
     console.error("提交失敗:", error);
   }
 }
+
+
+async function cancelEdit() {
+    // 這裡可以根據需求執行返回上一頁、清空表單等操作
+    router.push(`/guideline/all`); // 導回指引首頁
+}
+// 根據類型顯示不同的 placeholder
+const getPlaceholder = (type) => {
+  switch (type) {
+    case "text":
+      return "輸入文字";
+    case "link":
+      return "輸入超連結 (https://...)";
+    case "map":
+      return "輸入 Google 地圖網址 (https://www.google.com/maps/...)";
+    case "video":
+      return "輸入 YouTube 內嵌連結 (https://www.youtube.com/embed/...)";
+    default:
+      return "";
+  }
+};
   </script>
   
   <style scoped>
@@ -228,5 +253,19 @@ async function submitForm() {
     border-radius: 5px;
     object-fit: cover;
   }
+
+  .cancel-button {
+  background-color: #ccc;
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  margin-left: 10px; /* 讓按鈕有間距 */
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.cancel-button:hover {
+  background-color: #aaa;
+}
   </style>
   

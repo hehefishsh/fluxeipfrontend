@@ -15,8 +15,32 @@
 
                 <!-- 如果是圖片 -->
                 <p v-if="content.contentType === 'image'">
-                <img :src="content.imageContent" alt="圖片" style="width: 100%; height: auto;">
+                <img :src="content.imageContent" alt="圖片" style="width: 50%; height: auto;">
                 </p>
+
+                <!-- Google Map -->
+    <div v-if="content.contentType === 'map'">
+      <iframe
+        :src="content.textContent"
+        width="100%"
+        height="1000"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+
+    <!-- 內嵌影片 -->
+    <div v-if="content.contentType === 'video'" class="video-container">
+      <iframe
+        :src="content.textContent"
+        width="100%"
+        height="1000"
+        frameborder="0"
+        allowfullscreen>
+      </iframe>
+    </div>
             </div>
         <div class="bg-white py-4"></div>
         </div>
@@ -50,11 +74,9 @@ const contents = ref([])
 const guideId = route.params.id
 onMounted(async () => {
      // 從路由中取得動態參數 id
-    console.log(guideId)
     try {
     // 發送 GET 請求到後端 API
         const response = await axios.get(`${path}/api/guidelines/${guideId}`)
-        console.log(response); 
         guideline.value = response.data.guideline  // 儲存返回的指南資料
         contents.value = response.data.contents  // 儲存相關的內容列表
     } catch (error) {

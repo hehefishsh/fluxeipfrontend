@@ -80,7 +80,6 @@ watch(contacts, (newContacts) => {
 const contact = newContacts.find((emp) => emp.empId === userStore.empId);
 const department= departments.value.find(dep => dep.departmentName === contact.department);
 departmentName.value=department.departmentName
-console.log(departmentName)
 });
 const saveShiftType = async () => {
   try {

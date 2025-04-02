@@ -162,7 +162,6 @@
           <table class="table table-borderless table-thead-border">
             <thead>
               <tr>
-                <th class="text">流程 ID</th>
                 <th class="text">流程名稱</th>
                 <th class="text">請求類型</th>
                 <th class="text">適用職位</th>
@@ -172,7 +171,6 @@
             </thead>
             <tbody>
               <tr v-for="(flow, index) in paginatedFlows" :key="index">
-                <td class="text">{{ flow.flowId }}</td>
                 <td class="text">{{ flow.flowName }}</td>
                 <td class="text">{{ flow.requestType }}</td>
                 <td class="text">{{ flow.employeePosition }}</td>

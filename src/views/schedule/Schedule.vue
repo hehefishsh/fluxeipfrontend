@@ -23,8 +23,14 @@
         </option>
       </select>
     </div>
+        <!-- 新增整個月班表按鈕 -->
+    <button class="btn btn-success mr-3" @click="addMonthlySchedule">
+      新增這個月班表
+    </button>
+    <button class="btn btn-danger" @click="handleDeleteMonthSchedule">刪除整月班表</button>
 
-    <FullCalendar :options="calendarOptions" />
+
+    <FullCalendar ref="calendarRef" :options="calendarOptions" />
   </div>
 </template>
     
@@ -35,6 +41,7 @@ import Swal from "sweetalert2";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import axiosapi from "@/plugins/axios";
 
 const path = import.meta.env.VITE_API_URL;
 import useUserStore from "@/stores/user";
@@ -50,6 +57,7 @@ const selectedEmployee = ref(""); // 已選擇的員工
 const schedules = ref([]); // 該員工的班表
 const shiftTypes = ref([]); // 班別資料
 const contacts=ref([])
+const calendarRef = ref(null);
 
 const calendarOptions = ref({
   plugins: [dayGridPlugin, interactionPlugin],
@@ -62,9 +70,21 @@ const calendarOptions = ref({
   };
 },
   eventClick: handleEventClick, // 點擊事件觸發
-
+  datesSet: fetchCurrentMonthData, // 當月變更時重新獲取資料
 
 });
+
+async function fetchCurrentMonthData() {
+  if (!calendarRef.value) return;
+
+  const calendarApi = calendarRef.value.getApi();
+  const currentStart = calendarApi.view.currentStart;
+
+  // 強制使用 UTC 時間來計算當月的第一天，避免時區問題
+  const firstDayOfMonth = new Date(Date.UTC(currentStart.getFullYear(), currentStart.getMonth(), 1));  // 使用 UTC 時間，將日期設為當月的第一天
+  const firstDayOfMonthISO = firstDayOfMonth.toISOString().slice(0, 10);  // 轉換為 YYYY-MM-DD 格式
+  return firstDayOfMonthISO;
+}
 
 // 取得所有部門
 onMounted(async () => {
@@ -173,35 +193,115 @@ const departmentName = department.departmentName;
     return options;
   }, {});
 
-  const { value: shiftTypeId } = await Swal.fire({
+  const { value: shiftTypeId, isConfirmed } = await Swal.fire({
     title: "選擇班別",
+    input: "select",
+    inputOptions: shiftOptions,
+    inputPlaceholder: "選擇班別",
+    showCancelButton: true,
+    confirmButtonText: "確定",
+    cancelButtonText: "取消",
+  });
+
+  if (isConfirmed) {
+  if (!shiftTypeId) {
+    return Swal.fire("請選擇班別", "", "error");
+  }
+
+  const selectedShift = filteredShifts.find((shift) => shift.shiftTypeId == shiftTypeId);
+
+  if (!selectedShift) {
+    return Swal.fire("找不到選擇的班別", "", "error");
+  }
+
+  try {
+    await axios.post(`${path}/api/schedule`, {
+      employeeId: selectedEmployee.value,
+      date: info.dateStr,
+      shiftTypeId: selectedShift.shiftTypeId,
+      departmentName: departmentName,
+    });
+
+    Swal.fire("班表已新增", "", "success");
+    fetchSchedule(); // 重新載入班表
+  } catch (error) {
+    Swal.fire({
+      title: error.response?.data || "新增班表失敗",
+      icon: "error",
+    });
+  }
+}
+}
+
+async function addMonthlySchedule() {
+  if (!selectedEmployee.value) {
+    Swal.fire("請先選擇員工", "", "warning");
+    return;
+  }
+
+  // 取得該員工所屬的部門 ID
+  const employee = employees.value.find((emp) => emp.employeeId === selectedEmployee.value);
+  if (!employee) return;
+
+  const department = departments.value.find(dep => dep.departmentId === employee.department.departmentId);
+if (!department) {
+  Swal.fire("找不到該員工的部門", "", "error");
+  return;
+}
+const departmentName = department.departmentName;
+  // 只篩選該部門的班別
+  const filteredShifts = shiftTypes.value.filter(
+    (shift) => shift.departmentName === departmentName
+  );
+  if (filteredShifts.length === 0) {
+    Swal.fire("該部門沒有可選擇的班別", "", "warning");
+    return;
+  }
+
+  // 生成班別選項
+  const shiftOptions = filteredShifts.reduce((options, shift) => {
+    options[shift.shiftTypeId] = shift.shiftName;
+    return options;
+  }, {});
+
+  const { value: monthShiftTypeId, isDismissed } = await Swal.fire({
+    title: "選擇班別（整個月）",
     input: "select",
     inputOptions: shiftOptions,
     inputPlaceholder: "選擇班別",
     showCancelButton: true,
   });
 
-  if (shiftTypeId) {
-try{
+    // 按「取消」時，直接 return，什麼都不做
+    if (isDismissed) {
+    return;
+  }
 
+  if (!monthShiftTypeId) {
+    return Swal.fire("請選擇班別", "", "error");
+  }
 
-const selectedShift = filteredShifts.find((shift) => shift.shiftTypeId == shiftTypeId);
+  const selectedShift = filteredShifts.find((shift) => shift.shiftTypeId == monthShiftTypeId);
 
-await axios.post(`${path}/api/schedule`, {
+  if (!selectedShift) {
+    return Swal.fire("找不到選擇的班別", "", "error");
+  }
+
+  try {
+    await axios.post(`${path}/api/schedule/month`, {
       employeeId: selectedEmployee.value,
-      date: info.dateStr,
+      date: await fetchCurrentMonthData(),
       shiftTypeId: selectedShift.shiftTypeId,
-      departmentName:departmentName,
+      departmentName: departmentName,
     });
 
-    Swal.fire("班表已新增", "", "success");
+    Swal.fire("整個月班表已新增", "", "success");
     fetchSchedule(); // 重新載入班表
-}catch(error){
-        Swal.fire({
-            title: error.response.data,
-            icon: "error",
-        });
-}
+  } catch (error) {
+    Swal.fire({
+      title: error.response.data,
+      icon: "error",
+    });
   }
 }
 
@@ -284,6 +384,38 @@ const departmentName = department.departmentName;
     }
   }
 }
+
+const handleDeleteMonthSchedule = async () => {
+  if (!selectedEmployee.value) {
+    Swal.fire("請先選擇員工", "", "warning");
+    return;
+  }
+
+  const result = await Swal.fire({
+    title: '確定刪除整月班表嗎?',
+    text: '這將會刪除當月的所有班表資料!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: '確定刪除',
+    cancelButtonText: '取消',
+  });
+  if (result.isConfirmed) {
+
+  try {
+    // 在這裡獲取當前月份或其他必要的資料
+    const date = await fetchCurrentMonthData();
+    
+    // 向後端發送請求來刪除整月班表
+    await axiosapi.delete(`/api/schedule/month/${selectedEmployee.value}?date=${date}`);
+    
+    Swal.fire('成功', '已刪除整月班表', 'success');
+    fetchSchedule();
+
+  } catch (error) {
+    Swal.fire('錯誤', error.response.data, 'error');
+  }
+}
+};
 </script>
     
 <style scoped>
