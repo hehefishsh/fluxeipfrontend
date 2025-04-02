@@ -1,0 +1,42 @@
+{
+  "name": "fluxeipvue",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
+    "@fullcalendar/vue3": "^6.1.15",
+    "axios": "^1.8.3",
+    "bootstrap": "^4.1.0",
+    "datatables": "^1.10.18",
+    "daterangepicker": "^3.0.3",
+    "dayjs": "^1.11.13",
+    "element-plus": "^2.9.6",
+    "jquery": "^3.2.1",
+    "jvectormap": "^2.0.3",
+    "jwt-decode": "^4.0.0",
+    "moment": "^2.30.1",
+    "nprogress": "^0.2.0",
+    "pinia": "^3.0.1",
+    "pinia-plugin-persistedstate": "^4.2.0",
+    "simplebar": "^5.1.0",
+    "sweetalert2": "^11.17.2",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0",
+    "vuejs-paginate-next": "^1.0.2",
+    "vuetify": "^3.7.16"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^6.2.1",
+    "vite-plugin-vue-devtools": "^7.7.2"
+  }
+}
