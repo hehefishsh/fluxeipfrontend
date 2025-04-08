@@ -3,6 +3,9 @@
       <form @submit.prevent="submitForm">
         <!-- 標題 -->
         <h3 class="form-title">標題</h3>
+        <button type="button" class="mr-3 badge badge-pill badge-info" @click="fillDemoData">
+    demo
+  </button>
         <input v-model="guideline.guideTitle" placeholder="輸入標題" class="input-field" required/>
   
         <!-- 內容區塊 -->
@@ -53,6 +56,7 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router"; // 引入 useRoute
 import axios from "axios";
 import { useRouter } from 'vue-router';
+import Swal from "sweetalert2";
 
 const path = import.meta.env.VITE_API_URL;
 
@@ -67,6 +71,18 @@ const route = useRoute();
 
 const guidelineId = route.params.guidelineId; // 從路由參數中獲取 guidelineId
 
+const demo={
+  guideline:{guideTitle: "薪資結算頁面說明"},
+  contents:[
+    {contentType: "text", textContent: "1.自動從後端計算並查詢"},
+    {contentType: "text", textContent: "2.從後端透過薪資計算"},
+    {contentType: "image", imageContent: ""},
+  ]
+}
+const fillDemoData = () => {
+  guideline.value = demo.guideline;
+  contents.value = demo.contents;
+};
 // **新增欄位**
 function addField() {
   contents.value.push({ contentType: "text", textContent: "" });
@@ -123,9 +139,17 @@ async function submitForm() {
     const response = await axios.post(`${path}/api/guidelines`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
+    await Swal.fire({
+                        title:"智庫新增成功",
+                        icon:"success"
+                    });
     router.push({ name: "guideline-all-link" });
   } catch (error) {
     console.error("提交失敗:", error);
+    Swal.fire({
+                    title:"失敗"+error.message,
+                    icon:"error"
+                })
   }
 }
 

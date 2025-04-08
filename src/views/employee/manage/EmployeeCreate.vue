@@ -1,4 +1,5 @@
 <template>
+    <button type="button" @click="Demo" class="badge badge-pill badge-info">Demo</button>
         <div class="form-group">
                         <label for="employeeName">員工姓名</label>
                         <input type="text" class="form-control rounded-0" id="employeeName" placeholder="姓名"
@@ -188,6 +189,18 @@ async function positionFind(){
         console.error("獲取職位2資料失敗:", error);
     } 
     }
+}
+
+function Demo(){
+    employee.value.employeeName='林河漢'
+    employee.value.departmentName='技術部'
+    employee.value.positionName='員工'
+    employee.value.hireDate='2025-04-10'
+    employee.value.birthday='1998-01-06'
+    employee.value.email='yejixiu43@gmail.com'
+    employee.value.gender='男'
+    employee.value.identityCard='D164746244'
+    employee.value.phone='0985632569'
 }
 
 function submit(){

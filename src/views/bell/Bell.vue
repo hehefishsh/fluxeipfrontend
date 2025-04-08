@@ -57,7 +57,7 @@
   
   onMounted(() => {
     fetchNotifications(); // 初次載入
-    pollingInterval = setInterval(fetchNotifications, 3600000);
+    pollingInterval = setInterval(fetchNotifications, 5000);
     document.addEventListener('click', handleClickOutside);
   });
   
@@ -107,9 +107,13 @@
   
       unreadCount.value = notifyList.value.filter(n => !n.isRead).length;
   
-      if (notify.message.includes('會議')) {
+      if (notify.message.includes('已拒絕參加')|| notify.message.includes('已確認參加')) {
+        router.push('/meeting/host');
+      }else if (notify.message.includes('是否出席')) {
+        router.push('/meeting/invite');
+      }else if (notify.message.includes('會議')) {
         router.push('/meeting/create');
-      } else if (notify.message.includes('假單')) {
+      }else if (notify.message.includes('假單')) {
         router.push('/requestapproval/leave');
       } else if (notify.message.includes('請假申請')) {
         router.push('/requestmanage/leave');
@@ -136,6 +140,8 @@
       }else if (notify.message.includes('《下班》')) {
         router.push('/requestmanage/missingpunch');
       }else if (notify.message.includes('班表已排定')) {
+        router.push('/schedule/detail');
+      }else if (notify.message.includes('已被更新')) {
         router.push('/schedule/detail');
       }
   

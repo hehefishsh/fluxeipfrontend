@@ -2,7 +2,9 @@
     <div class="card card-default form-container">
       <form @submit.prevent="submitForm">
         <!-- 標題 -->
-        <h3 class="form-title">標題</h3>
+        <h3 class="form-title">標題</h3>        <button type="button" class="mr-3 badge badge-pill badge-info" @click="fillDemoData">
+    demo
+  </button>
         <input v-model="guideline.guideTitle" placeholder="輸入標題" class="input-field" />
   
         <!-- 內容區塊 -->
@@ -53,6 +55,7 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router"; // 引入 useRoute
 import axios from "axios";
 import { useRouter } from 'vue-router';
+import Swal from "sweetalert2";
 
 const path = import.meta.env.VITE_API_URL;
 
@@ -66,6 +69,22 @@ const router = useRouter();
 const route = useRoute();
 
 const guidelineId = route.params.id; // 從路由參數中獲取 guidelineId
+
+const demo={
+  guideline:{guideTitle: "薪資結算頁面說明"},
+  contents:[
+  {contentType: "image", imageContent: ""},
+    {contentType: "text", textContent: "1.自動從後端計算並查詢"},
+    {contentType: "text", textContent: "2.從後端透過薪資計算"},
+    {contentType: "image", imageContent: ""},
+    {contentType: "text", textContent: "1.點選後可新增並選擇獎金 金額已設定好"},
+    {contentType: "text", textContent: "2.年終獎金需要手動輸入"},
+  ]
+}
+const fillDemoData = () => {
+  guideline.value = demo.guideline;
+  contents.value = demo.contents;
+};
 
 onMounted(async () => {
   if (!guidelineId) return;
@@ -156,8 +175,16 @@ console.log("即將提交的資料:", formDataObject);
       headers: { "Content-Type": "multipart/form-data" },
     });
     console.log("提交成功:");
+    await Swal.fire({
+                        title:"智庫新增成功",
+                        icon:"success"
+                    });
     router.push({ name: "guideline-all-link" });
   } catch (error) {
+    Swal.fire({
+                    title:"失敗"+error.message,
+                    icon:"error"
+                })
     console.error("提交失敗:", error);
   }
 }

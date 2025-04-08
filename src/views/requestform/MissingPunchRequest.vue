@@ -2,14 +2,26 @@
   <div class="card card-default" id="work-adjustment-request">
     <div class="card-header">
       <h2>補卡申請</h2>
-      <button type="button" @click="fillDemoData" class="badge badge-pill badge-info">Demo</button>
+      <button
+        type="button"
+        @click="fillDemoData"
+        class="badge badge-pill badge-info"
+      >
+        Demo
+      </button>
     </div>
     <div class="card-body py-0">
       <form @submit.prevent="submitMissingPunch" class="form-group">
         <!-- 申請人 -->
         <div class="form-group">
           <label for="employee">申請人</label>
-          <input type="text" id="employee" class="form-control rounded-0" v-model="currentEmployeeName" readonly />
+          <input
+            type="text"
+            id="employee"
+            class="form-control rounded-0"
+            v-model="currentEmployeeName"
+            readonly
+          />
         </div>
 
         <!-- 補卡類型 -->
@@ -17,7 +29,12 @@
           <label for="adjustmentType">
             <font color="red">*</font>補卡類型
           </label>
-          <select id="adjustmentType" class="form-control rounded-0" v-model="missingPunchRequest.clockTypeId" required>
+          <select
+            id="adjustmentType"
+            class="form-control rounded-0"
+            v-model="missingPunchRequest.clockTypeId"
+            required
+          >
             <option v-for="type in clockTypes" :key="type.id" :value="type.id">
               {{ type.typeName }}
             </option>
@@ -29,17 +46,25 @@
           <label for="adjustmentDate">
             <font color="red">*</font>補卡日期
           </label>
-          <input type="date" id="adjustmentDate" class="form-control rounded-0"
-            v-model="missingPunchRequest.missingDate" required />
+          <input
+            type="date"
+            id="adjustmentDate"
+            class="form-control rounded-0"
+            v-model="missingPunchRequest.missingDate"
+            required
+          />
         </div>
 
         <!-- 申請原因 -->
         <div class="form-group">
-          <label for="reason">
-            <font color="red">*</font>申請原因
-          </label>
-          <textarea id="reason" class="form-control rounded-0" v-model="missingPunchRequest.reason" required
-            maxlength="200"></textarea>
+          <label for="reason"> <font color="red">*</font>申請原因 </label>
+          <textarea
+            id="reason"
+            class="form-control rounded-0"
+            v-model="missingPunchRequest.reason"
+            required
+            maxlength="200"
+          ></textarea>
           <small class="form-text text-muted">最多可輸入 200 字。</small>
         </div>
 
@@ -120,14 +145,17 @@ async function submitMissingPunch() {
 
 // Demo 鈕
 function fillDemoData() {
-  const businessMissingPunch = clockTypes.value.find(type => type.typeName === "上班");
+  const businessMissingPunch = clockTypes.value.find(
+    (type) => type.typeName === "上班"
+  );
   if (businessMissingPunch) {
     missingPunchRequest.clockTypeId = businessMissingPunch.id;
   }
 
-  missingPunchRequest.missingDate = "2025-04-15";
+  // 設定今天日期（格式為 yyyy-MM-dd）
+  const today = new Date().toISOString().split("T")[0];
+  missingPunchRequest.missingDate = today;
   missingPunchRequest.reason = "忘記打卡";
-
 }
 
 // 返回上一頁

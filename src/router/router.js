@@ -20,11 +20,15 @@ import BulletinList from "@/views/bulletin/BulletinList.vue";
 import BulletinForm from "@/views/bulletin/BulletinForm.vue";
 import workpro from "@/views/work/work";
 import salaryRoutes from "@/views/salary/salary";
-import PersonalCalendar from "@/views/calendar/PersonalCalendar.vue";
 import calendarRoutes from "@/views/calendar/calendar";
 import fieldworkmanageRoutes from "@/views/fieldwork/fieldwork";
 
+
 const routes = [
+
+
+
+
   {
     path: "/",
     component: Home,
@@ -67,7 +71,7 @@ const routes = [
   scheduleRoutes,
   workpro,
   salaryRoutes,
-  calendarRoutes,
+  ...calendarRoutes
 ];
 
 const router = createRouter({
@@ -95,5 +99,6 @@ router.beforeEach((to, from, next) => {
     }
   }
 });
+
 
 export default router;

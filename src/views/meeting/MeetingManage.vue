@@ -2,7 +2,7 @@
   <div class="container mt-4">
     <div class="row mb-4">
       <div class="col-4">
-        <input type="text" class="form-control" placeholder="搜尋會議室..." v-model.lazy.trim="search" @input="applyFilter">
+        <input type="text" class="form-control" placeholder="搜尋會議室..." v-model.trim="search">
       </div>
       <div class="col d-flex justify-content-end">
         <button v-if="isAdmin" class="btn btn-outline-primary btn-pill" @click="openAddModal">新增會議室</button>
@@ -237,7 +237,7 @@ function closeModal() {
 
 
 // 新增會議室 Modal
-function openAddModal() {meetings.notes,
+function openAddModal() {
   isEditMode.value = false;
   selectedRoom.value = { roomName: "", capacity: 1, location: "" };
   isModalOpen.value = true;
@@ -330,7 +330,7 @@ async function handleReserve(meeting) {
     isReserveModalOpen.value = false;
 
   } catch (error) {
-    Swal.fire("錯誤", "預約失敗，請稍後再試", "error");
+    Swal.fire("錯誤", " 您選擇的時間內已有其他預約", "error");
   }
 }
 

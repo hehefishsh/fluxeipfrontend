@@ -28,7 +28,7 @@
         last-button-text="&gt;&gt;"
         prev-text="&lt;"
         next-text="&gt;"
-        :initial-page="current"
+        :force-page="current"
         :page-count="pages"
         :page-range="3"
         :margin-pages="2"
@@ -108,6 +108,7 @@ function applyFilter() {
     filteredEmps.value = filteredData;
 
     pages.value = Math.ceil(filteredEmps.value.length / rows.value);
+    current.value=1;
 }
 
 function changePage(page) {

@@ -56,6 +56,8 @@ const selectedDepartment = ref(""); // 已選擇的部門
 const selectedEmployee = ref(""); // 已選擇的員工
 const schedules = ref([]); // 該員工的班表
 const shiftTypes = ref([]); // 班別資料
+const shiftTypesAll = ref([]); // 班別資料
+
 const contacts=ref([])
 const calendarRef = ref(null);
 
@@ -102,6 +104,12 @@ onMounted(async () => {
     console.error("取得班別資料失敗:", error);
   }
 
+  try {
+    const res = await axios.get(`${path}/api/shiftType/all`);
+    shiftTypesAll.value = res.data; // 取得班別資料
+  } catch (error) {
+    console.error("取得班別資料失敗:", error);
+  }
   
   try {
     const res = await axios.get(`${path}/api/contacts`);
@@ -146,7 +154,7 @@ const fetchSchedule = async () => {
       `${path}/api/schedule/emp/${selectedEmployee.value}`
     );
     schedules.value = res.data.map((schedule) => {
-        const shift = shiftTypes.value.find(st => st.shiftName === schedule.shiftTypeName)
+        const shift = shiftTypesAll.value.find(st => st.shiftName === schedule.shiftTypeName)
 return{
         title: shift ? `${schedule.shiftTypeName} (${shift.startTime} - ${shift.finishTime})` : schedule.shiftTypeName,
         start: schedule.date,

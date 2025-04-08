@@ -5,7 +5,7 @@
       <el-tab-pane label="所有預約" name="all" />
       <el-tab-pane label="審核中" name="審核中" />
       <el-tab-pane label="已審核" name="已審核" />
-      <el-tab-pane label="未核准" name="未核准" />
+      <el-tab-pane label="未完成" name="未完成" />
     </el-tabs>
 
     <!-- 表格 -->
@@ -102,7 +102,7 @@ function statusTagType(status) {
   switch (status) {
     case "審核中": return "warning";
     case "已審核": return "success";
-    case "未核准": return "danger";
+    case "未完成": return "danger";
     default: return "info";
   }
 }

@@ -56,6 +56,9 @@
                       <button class="mr-1 mb-1 badge badge-pill badge-info " @click="fillDemo('1006')">
                         行政部-員工-趙六
                       </button>
+                      <button class="mr-1 mb-1 badge badge-pill badge-info " @click="fillDemo('1009')">
+                        人資部-經理-孫七
+                      </button>
                     </div>
                   </div>
                 </div>

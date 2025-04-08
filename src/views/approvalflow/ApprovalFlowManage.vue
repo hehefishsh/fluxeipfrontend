@@ -246,6 +246,7 @@ const handleCategoryChange = async () => {
   if (!selectedCategory.value) {
     selectedRequestType.value = ""; // 清空請求類型
     requestTypes.value = []; // 清空請求類型列表
+    currentPage.value = 1;
     fetchApprovalFlows(); // **確保清空後，重新查詢流程**
     return;
   }
@@ -257,7 +258,7 @@ const handleCategoryChange = async () => {
   } else {
     selectedRequestType.value = "";
   }
-
+  currentPage.value = 1;
   fetchApprovalFlows(); // **執行流程查詢**
 };
 
@@ -284,7 +285,7 @@ const debouncedFetchApprovalFlows = debounce(() => {
 }, 500);
 
 // **獲取簽核流程**
-const fetchApprovalFlows = async () => {
+const fetchApprovalFlows = async (z) => {
   console.log("查詢參數：", {
     page: currentPage.value,
     size: itemsPerPage.value,
@@ -350,9 +351,20 @@ const deleteFlow = async (flowId) => {
 };
 
 // **監聽搜尋條件變更**
-watch(searchQuery, () => debouncedFetchApprovalFlows());
-watch(selectedRequestType, fetchApprovalFlows);
-watch(selectedPosition, fetchApprovalFlows);
+watch(searchQuery, () => {
+  currentPage.value = 1;
+  debouncedFetchApprovalFlows();
+});
+
+watch(selectedRequestType, () => {
+  currentPage.value = 1;
+  fetchApprovalFlows();
+});
+
+watch(selectedPosition, () => {
+  currentPage.value = 1;
+  fetchApprovalFlows();
+});
 watch(itemsPerPage, () => {
   currentPage.value = 1; // 重新選擇每頁數量時，回到第一頁
   fetchApprovalFlows();

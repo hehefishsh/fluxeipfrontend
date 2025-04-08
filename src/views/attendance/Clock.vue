@@ -2,7 +2,7 @@
   <div class="accordion accordion-shadow">
     <div class="card card-default">
       <!-- 時鐘顯示 -->
-      <div class="clock" style="padding: 10px;">
+      <div class="clock" style="padding: 10px">
         <canvas id="clock-canvas"></canvas>
       </div>
       <div>
@@ -18,10 +18,16 @@
 
         <!-- 外出/外出結束 打卡按鈕 -->
         <div class="button-group">
-          <button @click="startFieldWork" class="mb-1 btn btn-outline-primary btn-pill">
+          <button
+            @click="startFieldWork"
+            class="mb-1 btn btn-outline-primary btn-pill"
+          >
             外出打卡
           </button>
-          <button @click="endFieldWork" class="mb-1 btn btn-outline-primary btn-pill">
+          <button
+            @click="endFieldWork"
+            class="mb-1 btn btn-outline-primary btn-pill"
+          >
             外出結束
           </button>
         </div>
@@ -29,7 +35,17 @@
         <div v-if="errorMessage" class="alert alert-danger m-5 text-center">
           {{ errorMessage }}
         </div>
-        <div v-if="message" class="alert alert-success m-5 text-center">{{ message }}</div>
+        <!-- 成功或警告訊息 -->
+        <div
+          v-if="message"
+          class="m-5 text-center alert"
+          :class="{
+            'alert-success': message.includes('打卡成功'),
+            'alert-danger': !message.includes('打卡成功'),
+          }"
+        >
+          {{ message }}
+        </div>
 
         <br />
         <div>
@@ -47,9 +63,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import axiosapi from "@/plugins/axios.js";
-import useUserStore from "@/stores/user.js";
 
-const user = useUserStore();
 const errorMessage = ref("");
 const message = ref("");
 
@@ -125,8 +139,6 @@ onBeforeUnmount(() => {
   justify-content: center;
 }
 
-
-
 .card {
   background-color: #fff;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -135,7 +147,7 @@ onBeforeUnmount(() => {
   text-align: center;
   width: 400px;
   border-radius: 0%;
-  box-shadow: none
+  box-shadow: none;
 }
 
 .clock {
@@ -159,30 +171,5 @@ onBeforeUnmount(() => {
   cursor: pointer;
   font-size: 16px;
   margin: 0 10px;
-}
-
-.status {
-  margin-top: 10px;
-  font-size: 18px;
-}
-
-.success {
-  color: green;
-}
-
-.success::before {
-  content: "✓ ";
-}
-
-.error {
-  color: red;
-}
-
-.error::before {
-  content: "✗ ";
-}
-
-.subtle {
-  color: #7f8c8d;
 }
 </style>

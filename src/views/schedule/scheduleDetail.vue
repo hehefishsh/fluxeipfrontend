@@ -37,7 +37,7 @@ const calendarOptions = ref({
 
 onMounted(async () => {
   try {
-    const res = await axios.get(`${path}/api/shiftType`);
+    const res = await axios.get(`${path}/api/shiftType/all`);
     shiftTypes.value = res.data; // 取得班別資料
   } catch (error) {
     console.error("取得班別資料失敗:", error);

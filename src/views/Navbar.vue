@@ -497,7 +497,7 @@
                   </li>
                   <li
                     class="has-sub expand"
-                    :class="{ active: /^\/meeting(\/.*)?$/.test(route.path) }"
+                    :class="{ active: route.path === '/meeting/create'}"
                     v-if="
                       [
                         '最高管理員',
@@ -512,6 +512,16 @@
                   >
                     <RouterLink class="sidenav-item-link" to="/meeting/create">
                       <span class="nav-text">預約列表</span>
+                    </RouterLink>
+                  </li>
+                  <li :class="{ active: route.path === '/meeting/host'}" v-if="!['最高管理員', '次等管理員'].includes(user.roleName)">
+                      <RouterLink class="sidenav-item-link" to="/meeting/host">
+                        <span class="nav-text">主辦會議</span>
+                      </RouterLink>
+                  </li>
+                  <li :class="{ active: route.path === '/meeting/invite'}">
+                    <RouterLink class="sidenav-item-link" to="/meeting/invite">
+                      <span class="nav-text">會議邀請</span>
                     </RouterLink>
                   </li>
                 </div>
@@ -703,28 +713,8 @@
                       <span class="nav-text">個人資訊</span>
                     </RouterLink>
                   </li>
-                  <li>
-                    <a class="dropdown-link-item" href="email-inbox.html">
-                      <i class="mdi mdi-email-outline"></i>
-                      <span class="nav-text">Message</span>
-                      <span class="badge badge-pill badge-primary">24</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-link-item" href="user-activities.html">
-                      <i class="mdi mdi-diamond-stone"></i>
-                      <span class="nav-text">Activitise</span></a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-link-item"
-                      href="user-account-settings.html"
-                    >
-                      <i class="mdi mdi-settings"></i>
-                      <span class="nav-text">Account Setting</span>
-                    </a>
-                  </li>
+                  
+
 
                   <li class="dropdown-footer">
                     <a class="dropdown-link-item">
@@ -743,10 +733,12 @@
       <!-- ====================================
     ——— CONTENT WRAPPER
     ===================================== -->
-      <div class="content-wrapper">
+      <div class="content-wrapper" >
         <div class="content">
           <slot></slot>
         </div>
+
+        
 
         <!-- Footer -->
         <footer class="footer mt-auto">
@@ -766,110 +758,7 @@
       </div>
     </div>
   </div>
-  <!-- Card Offcanvas -->
-  <div class="card card-offcanvas" id="contact-off">
-    <div class="card-header">
-      <h2>Contacts</h2>
-      <a href="#" class="btn btn-primary btn-pill px-4">Add New</a>
-    </div>
-    <div class="card-body">
-      <div class="mb-4">
-        <input
-          type="text"
-          class="form-control form-control-lg form-control-secondary rounded-0"
-          placeholder="Search contacts..."
-        />
-      </div>
 
-      <div class="media media-sm">
-        <div class="media-sm-wrapper">
-          <a href="user-profile.html">
-            <img src="" alt="User Image" />
-            <span class="active bg-primary"></span>
-          </a>
-        </div>
-        <div class="media-body">
-          <a href="user-profile.html">
-            <span class="title">Selena Wagner</span>
-            <span class="discribe">Designer</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="media media-sm">
-        <div class="media-sm-wrapper">
-          <a href="user-profile.html">
-            <img src="" alt="User Image" />
-            <span class="active bg-primary"></span>
-          </a>
-        </div>
-        <div class="media-body">
-          <a href="user-profile.html">
-            <span class="title">Walter Reuter</span>
-            <span>Developer</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="media media-sm">
-        <div class="media-sm-wrapper">
-          <a href="user-profile.html">
-            <img src="" alt="User Image" />
-          </a>
-        </div>
-        <div class="media-body">
-          <a href="user-profile.html">
-            <span class="title">Larissa Gebhardt</span>
-            <span>Cyber Punk</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="media media-sm">
-        <div class="media-sm-wrapper">
-          <a href="user-profile.html">
-            <img src="" alt="User Image" />
-          </a>
-        </div>
-        <div class="media-body">
-          <a href="user-profile.html">
-            <span class="title">Albrecht Straub</span>
-            <span>Photographer</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="media media-sm">
-        <div class="media-sm-wrapper">
-          <a href="user-profile.html">
-            <img src="" alt="User Image" />
-            <span class="active bg-danger"></span>
-          </a>
-        </div>
-        <div class="media-body">
-          <a href="user-profile.html">
-            <span class="title">Leopold Ebert</span>
-            <span>Fashion Designer</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="media media-sm">
-        <div class="media-sm-wrapper">
-          <a href="user-profile.html">
-            <img src="" alt="User Image" />
-            <span class="active bg-primary"></span>
-          </a>
-        </div>
-        <div class="media-body">
-          <a href="user-profile.html">
-            <span class="title">Selena Wagner</span>
-            <span>Photographer</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script setup>

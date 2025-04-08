@@ -10,6 +10,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import ElementPlus from 'element-plus';
 
 
+
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 
@@ -17,4 +18,4 @@ createApp(App)
     .use(router)
     .use(pinia)
     .use(ElementPlus)
-    .mount("#app");
+    .mount("#app")

@@ -2,7 +2,11 @@
  <div class="container">
     <div class="card shadow-lg p-4">
       <h2 class="text-center mb-4">新增班別</h2>
-
+      <div class="mb-3 text-end">
+  <button type="button" class="mr-3 badge badge-pill badge-info" @click="fillDemoData">
+    demo
+  </button>
+</div>
       <form @submit.prevent="saveShiftType">
         <div class="mb-3">
           <label class="form-label">班別名稱：</label>
@@ -61,6 +65,20 @@ const contacts = ref([]);
 const path = import.meta.env.VITE_API_URL;
 import useUserStore from "@/stores/user";
 const userStore=useUserStore()
+
+const demo={
+  shiftName:'1小時班',
+  shiftCategory:'1hr',
+  startTime:'09:00',
+  finishTime:'10:00'
+}
+
+const fillDemoData = () => {
+  shiftName.value = demo.shiftName;
+  shiftCategory.value = demo.shiftCategory;
+  startTime.value = demo.startTime;
+  finishTime.value = demo.finishTime;
+};
 
 onMounted(async () => {
     try {

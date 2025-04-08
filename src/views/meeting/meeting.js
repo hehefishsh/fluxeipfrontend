@@ -1,6 +1,8 @@
 import MeetingCreate from "./MeetingCreate.vue";
 import MeetingManage from "./MeetingManage.vue";
+import MeetingHost from "./MeetingHost.vue";
 import useUserStore from "@/stores/user";
+import MeetingInvite from "./MeetingInvite.vue";
 
 
 const adminRoles = ["最高管理員", "次等管理員"]; // 管理員角色
@@ -31,6 +33,26 @@ const meetingRoutes = {
           next("/403"); // 未授權角色禁止
         }
       },
+    },
+    {
+      path: "host",
+      name: "meeting-host-link",
+      component: MeetingHost,
+      meta: { title: "我主辦的會議" },
+      beforeEnter: (to, from, next) => {
+        const userStore = useUserStore();
+        if ([...adminRoles, ...userRoles].includes(userStore.roleName)) {
+          next();
+        } else {
+          next("/403");
+        }
+      },
+    },
+    {
+      path: "invite",
+      name: "meeting-invite-link",
+      component: MeetingInvite,
+      meta: { title: "我被邀請的會議" },
     },
   ],
 };

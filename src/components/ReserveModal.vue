@@ -19,9 +19,7 @@
         </el-form-item>
 
 
-        <el-form-item label="內容">
-          <el-input v-model="meeting.notes" placeholder="請輸入會議內容"></el-input>
-        </el-form-item>
+  
         
   
         <el-form-item label="選擇日期">
@@ -55,10 +53,13 @@
   ></el-time-select>
 </el-form-item>
   
-        <div class="d-flex justify-content-end">
-          <el-button @click="close">取消</el-button>
-          <el-button type="primary" @click="reserveMeeting">送出預約</el-button>
-        </div>
+<div class="form-footer">
+  <el-button class="demo-btn" @click="fillDemoTitle">Demo</el-button>
+  <div class="right-buttons">
+    <el-button @click="close">取消</el-button>
+    <el-button class="custom-purple-btn" @click="reserveMeeting">送出預約</el-button>
+  </div>
+</div>
       </el-form>
     </el-dialog>
   </template>
@@ -72,6 +73,9 @@ import dayjs from "dayjs";  //dayjs 處理時間格式
 const emits = defineEmits(["update:isOpen", "reserve"]);
 
 
+const fillDemoTitle = () => {
+  meeting.value.title = "EIP 系統架構與操作說明會";
+};
 
 
 
@@ -188,6 +192,40 @@ const reserveMeeting = () => {
 
 :deep(.el-input__wrapper.is-disabled) {
   cursor: text !important;
+}
+
+.custom-purple-btn {
+  background-color: #9e6de0;
+  border-color: #9e6de0;
+  color: #fff;
+}
+.custom-purple-btn:hover {
+  background-color: #875bcc;
+  border-color: #875bcc;
+}
+
+
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.right-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.demo-btn {
+  background-color: #ffffff;
+  border: 1px solid #9e6de0;
+  color: #9e6de0;
+}
+.demo-btn:hover {
+  background-color: #f3eaff;
+  border-color: #875bcc;
+  color: #875bcc;
 }
 
 </style>

@@ -68,7 +68,7 @@
             {{ bonusOption.bonusType }}:{{ bonusOption.amount }}元
           </option>
         </select>
-        <button type="button" @click="removeBonus(index)">移除</button>
+        <button type="button" @click="(removeBonus(index),fetchEarnedSalary())">移除</button>
       </div>
       <button type="button" @click="addBonus" class="px-4 py-2 border border-black text-sm text-gray-700 rounded-md hover:bg-gray-100 transition">新增獎金/津貼</button>
     </div>
@@ -76,7 +76,7 @@
     <!-- 年終獎金的輸入框只顯示一次，v-model 為 yearEndBonus -->
     <div v-if="selectedBonuses.some(bonus => bonus?.bonusType === '年終獎金')">
       <label>年終獎金：</label>
-      <input type="number" v-model="yearEndBonus" placeholder="請輸入年終獎金" />
+      <input type="number" v-model="yearEndBonus" placeholder="請輸入年終獎金" @input="updateAvailableBonuses"/>
     </div>
     <div>
       <label>實得薪資：</label>
@@ -217,6 +217,9 @@ const fetchWorkData = async () => {
     console.error("獲取工作資料失敗", error);
   }
 };
+const updateAvailableBonuses=async()=>{
+  fetchEarnedSalary();
+}
 const fetchEarnedSalary=async()=>{
   const bonuses = selectedBonuses.value
     .filter(bonus => bonus?.salaryBonusId !== 'year-end-bonus')  // 假設年終獎金的 ID 是 'yearEnd'
