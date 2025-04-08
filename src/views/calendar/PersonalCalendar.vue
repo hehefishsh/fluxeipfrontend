@@ -31,7 +31,7 @@ export default {
     const route = useRoute();
     const events = ref([]);  // 用於存儲事件數據
     const toast = useToast();
-    const apiBaseUrl = "http://localhost:8080/calendar/personal";
+    const apiBaseUrl = "https://fluxeipbackend.onrender.com/calendar/personal";
 
     // 用戶信息
     const userStore = useUserStore();

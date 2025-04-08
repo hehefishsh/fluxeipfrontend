@@ -58,7 +58,7 @@ export default {
             console.log("📌 Sending event data:", newEvent);
 
             try {
-                const response = await axios.post("http://localhost:8080/calendar/personal", newEvent);
+                const response = await axios.post("https://fluxeipbackend.onrender.com/calendar/personal", newEvent);
                 console.log("✅ Event created successfully:", response.data);
                 router.push("/calendar/personal");
                 Swal.fire("成功", "事件新增成功", "success");

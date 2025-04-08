@@ -93,7 +93,7 @@ async function deleteContent(id){
         });
         if(result.isConfirmed){
             try{
-                const response=await axios.delete(`http://localhost:8080/api/guidelines/${id}`);
+                const response=await axios.delete(`https://fluxeipbackend.onrender.com/api/guidelines/${id}`);
                 console.log(response)
                 if(response.data.success){
                     await Swal.fire({

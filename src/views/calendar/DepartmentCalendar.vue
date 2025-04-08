@@ -31,7 +31,7 @@ export default {
     const route = useRoute();
     const events = ref([]);
     const toast = useToast();
-    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api/calendar/department"; // 改用環境變數配置API URL
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "https://fluxeipbackend.onrender.com/api/calendar/department"; // 改用環境變數配置API URL
     const userStore = useUserStore();
     const empId = userStore.empId; // 取得員工 ID
     const departmentId = ref("");  // 儲存從後端獲取的部門 ID
@@ -68,7 +68,7 @@ export default {
 
       try {
         // 修改 API 路徑為正確的格式
-        const response = await axios.get(`http://localhost:8080/api/employee/${empId}/department`);
+        const response = await axios.get(`https://fluxeipbackend.onrender.com/api/employee/${empId}/department`);
         departmentId.value = response.data.departmentId;
         toast.success("部門 ID 獲取成功");
 

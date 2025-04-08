@@ -21,7 +21,7 @@ export default {
     const newEventStart = ref('');
     const newEventEnd = ref('');
     const departmentId = ref('');
-    const apiBaseUrl = 'http://localhost:8080/api/calendar/department';
+    const apiBaseUrl = 'https://fluxeipbackend.onrender.com/api/calendar/department';
     const userStore = useUserStore();
     const empId = userStore.empId;
     const router = useRouter();
@@ -39,7 +39,7 @@ export default {
       }
 
       try {
-        const response = await axios.get(`http://localhost:8080/api/employee/${empId}/department`);
+        const response = await axios.get(`https://fluxeipbackend.onrender.com/api/employee/${empId}/department`);
         departmentId.value = response.data.departmentId;
         console.log("獲取的部門 ID:", departmentId.value); // 保留日誌，方便偵錯
       } catch (error) {
